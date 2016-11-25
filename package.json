@@ -1,35 +1,57 @@
 {
-    "name": "vscode-gfm-preview",
-    "displayName": "vscode-gfm-preview",
-    "description": "Preview Markdown with GFM using GitHub API",
-    "version": "0.0.1",
-    "publisher": "tomoki1207",
-    "engines": {
-        "vscode": "^1.5.0"
+  "name": "vscode-gfm-preview",
+  "displayName": "vscode-gfm-preview",
+  "description": "Preview Markdown with GFM using GitHub API",
+  "version": "0.0.1",
+  "publisher": "tomoki1207",
+  "engines": {
+    "vscode": "^1.5.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:gfmarkdown.showPreview",
+    "onCommand:gfmarkdown.showPreviewToSide"
+  ],
+  "main": "./out/src/extension",
+  "contributes": {
+    "commands": [
+      {
+        "command": "gfmarkdown.showPreview",
+        "title": "Open Preview(GFM)"
+      },
+      {
+        "command": "gfmarkdown.showPreviewToSide",
+        "title": "Open Preview to the Side(GFM)"
+      }
+    ]
+  },
+  "keybindings": [
+    {
+      "command": "gfmarkdown.showPreview",
+      "key": "shift+ctrl+g+v",
+      "mac": "shift+cmd+g+v",
+      "when": "!terminalFocus"
     },
-    "categories": [
-        "Other"
-    ],
-    "activationEvents": [
-        "onCommand:extension.sayHello"
-    ],
-    "main": "./out/src/extension",
-    "contributes": {
-        "commands": [{
-            "command": "extension.sayHello",
-            "title": "Hello World"
-        }]
-    },
-    "scripts": {
-        "vscode:prepublish": "tsc -p ./",
-        "compile": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install"
-    },
-    "devDependencies": {
-        "typescript": "^2.0.3",
-        "vscode": "^1.0.0",
-        "mocha": "^2.3.3",
-        "@types/node": "^6.0.40",
-        "@types/mocha": "^2.2.32"
+    {
+      "command": "gfmarkdown.showPreviewToSide",
+      "key": "ctrl+k+g v",
+      "mac": "cmd+k+g v"
     }
+  ],
+  "scripts": {
+    "vscode:prepublish": "tsc -p ./",
+    "compile": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install"
+  },
+  "devDependencies": {
+    "@types/mocha": "^2.2.32",
+    "@types/node": "^6.0.40",
+    "mocha": "^2.3.3",
+    "tslint": "^4.0.2",
+    "typescript": "^2.0.3",
+    "vscode": "^1.0.0"
+  },
+  "dependencies": {}
 }

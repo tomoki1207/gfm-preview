@@ -1,29 +1,91 @@
 'use strict';
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
+import * as vscode from 'vscode';
+import { Uri, TextDocument, ViewColumn } from 'vscode';
+import * as path from 'path';
+import { GFMDocumentContentProvider } from './gfmProvider';
+
 export function activate(context: vscode.ExtensionContext) {
 
-    // Use the console to output diagnostic information (console.log) and errors (console.error)
-    // This line of code will only be executed once when your extension is activated
-    console.log('Congratulations, your extension "vscode-gfm-preview" is now active!');
+  let provider = new GFMDocumentContentProvider(context);
+  let registration = vscode.workspace.registerTextDocumentContentProvider('gfm-markdown', provider);
 
-    // The command has been defined in the package.json file
-    // Now provide the implementation of the command with  registerCommand
-    // The commandId parameter must match the command field in package.json
-    let disposable = vscode.commands.registerCommand('extension.sayHello', () => {
-        // The code you place here will be executed every time your command is executed
+  let c1 = vscode.commands.registerCommand('gfmarkdown.showPreview', showPreview);
+  let c2 = vscode.commands.registerCommand('gfmarkdown.showPreviewToSide', uri => showPreview(uri, true));
 
-        // Display a message box to the user
-        vscode.window.showInformationMessage('Hello World!');
-    });
+  context.subscriptions.push(c1, c2, registration);
 
-    context.subscriptions.push(disposable);
+  vscode.workspace.onDidSaveTextDocument(document => {
+    if (isTargetMarkdownFile(document)) {
+      const uri = getMarkdownUri(document.uri);
+      provider.update(uri);
+    }
+  });
+
+  vscode.workspace.onDidChangeTextDocument(event => {
+    if (isTargetMarkdownFile(event.document)) {
+      const uri = getMarkdownUri(event.document.uri);
+      provider.update(uri);
+
+    }
+  });
 }
 
-// this method is called when your extension is deactivated
+function isTargetMarkdownFile(document: TextDocument) {
+  return document.languageId === 'markdown' && document.uri.scheme !== 'gfm-markdown';
+}
+
+function getMarkdownUri(uri: Uri) {
+  return uri.with({ scheme: 'gfm-markdown', path: uri.path + '.rendered', query: uri.toString() });
+}
+
+
+function showPreview(uri?: Uri, sideBySide: boolean = false) {
+
+  let resource = uri;
+  if (!(resource instanceof Uri)) {
+    if (vscode.window.activeTextEditor) {
+      // we are relaxed and don't check for markdown files
+      resource = vscode.window.activeTextEditor.document.uri;
+    }
+  }
+
+  if (!(resource instanceof Uri)) {
+    if (!vscode.window.activeTextEditor) {
+      // this is most likely toggling the preview
+      return vscode.commands.executeCommand('markdown.showSource');
+    }
+    // nothing found that could be shown or toggled
+    return;
+  }
+
+  let thenable = vscode.commands.executeCommand('vscode.previewHtml',
+    getMarkdownUri(resource),
+    getViewColumn(sideBySide),
+    `Preview '${path.basename(resource.fsPath)}'`);
+  return thenable;
+}
+
+function getViewColumn(sideBySide): ViewColumn {
+  const active = vscode.window.activeTextEditor;
+  if (!active) {
+    return ViewColumn.One;
+  }
+
+  if (!sideBySide) {
+    return active.viewColumn;
+  }
+
+  switch (active.viewColumn) {
+    case ViewColumn.One:
+      return ViewColumn.Two;
+    case ViewColumn.Two:
+      return ViewColumn.Three;
+  }
+
+  return active.viewColumn;
+}
+
+
 export function deactivate() {
 }
