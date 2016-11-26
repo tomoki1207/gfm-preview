@@ -23,39 +23,38 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   vscode.workspace.onDidChangeTextDocument(event => {
-    if (isTargetMarkdownFile(event.document)) {
+    if (isTargetMarkdownFile(event.document) && updateOnDocumentChanged()) {
       const uri = getMarkdownUri(event.document.uri);
       provider.update(uri);
-
     }
   });
 }
 
-function isTargetMarkdownFile(document: TextDocument) {
+function isTargetMarkdownFile(document: TextDocument): boolean {
   return document.languageId === 'markdown' && document.uri.scheme !== 'gfm-markdown';
 }
 
-function getMarkdownUri(uri: Uri) {
+function getMarkdownUri(uri: Uri): Uri {
   return uri.with({ scheme: 'gfm-markdown', path: uri.path + '.rendered', query: uri.toString() });
 }
 
+function updateOnDocumentChanged(): boolean {
+  return vscode.workspace.getConfiguration('gfmpreview').get('previewUpdateOnChanged', false);
+}
 
-function showPreview(uri?: Uri, sideBySide: boolean = false) {
+function showPreview(uri?: Uri, sideBySide: boolean = false): Thenable<{}> {
 
   let resource = uri;
   if (!(resource instanceof Uri)) {
     if (vscode.window.activeTextEditor) {
-      // we are relaxed and don't check for markdown files
       resource = vscode.window.activeTextEditor.document.uri;
     }
   }
 
   if (!(resource instanceof Uri)) {
     if (!vscode.window.activeTextEditor) {
-      // this is most likely toggling the preview
       return vscode.commands.executeCommand('markdown.showSource');
     }
-    // nothing found that could be shown or toggled
     return;
   }
 

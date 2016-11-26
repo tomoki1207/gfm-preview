@@ -4,6 +4,13 @@
   "description": "Preview Markdown with GFM using GitHub API",
   "version": "0.0.1",
   "publisher": "tomoki1207",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tomoki1207/gfm-preview.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tomoki1207/gfm-preview/issues"
+  },
   "engines": {
     "vscode": "^1.5.0"
   },
@@ -25,19 +32,29 @@
         "command": "gfmarkdown.showPreviewToSide",
         "title": "Open Preview to the Side(GFM)"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "GFM Markdown preview configuration",
+      "properties": {
+        "gfmpreview.previewUpdateOnChanged": {
+          "type": "boolean",
+          "default": true,
+          "description": "Update preview on file chenged. Set it to false to economize GitHun API request count."
+        }
+      }
+    }
   },
   "keybindings": [
     {
       "command": "gfmarkdown.showPreview",
-      "key": "shift+ctrl+g+v",
-      "mac": "shift+cmd+g+v",
+      "key": "ctrl+alt+g",
+      "mac": "cmd+alt+g",
       "when": "!terminalFocus"
     },
     {
       "command": "gfmarkdown.showPreviewToSide",
-      "key": "ctrl+k+g v",
-      "mac": "cmd+k+g v"
+      "key": "ctrl+k g",
+      "mac": "cmd+k g"
     }
   ],
   "scripts": {
