@@ -43,7 +43,6 @@ function updateOnDocumentChanged(): boolean {
 }
 
 function showPreview(uri?: Uri, sideBySide: boolean = false): Thenable<{}> {
-
   let resource = uri;
   if (!(resource instanceof Uri)) {
     if (vscode.window.activeTextEditor) {

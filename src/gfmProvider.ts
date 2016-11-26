@@ -23,8 +23,8 @@ export class GFMDocumentContentProvider implements vscode.TextDocumentContentPro
     this._onDidChange.fire(uri);
   }
 
-  private request(body: string): Thenable<string> {
-    let options = {
+  private createOptions(body: string): https.RequestOptions {
+    const options: https.RequestOptions = {
       host: 'api.github.com',
       path: '/markdown',
       method: 'POST',
@@ -33,8 +33,21 @@ export class GFMDocumentContentProvider implements vscode.TextDocumentContentPro
         'User-Agent': 'markup: markdown renderer'
       }
     };
+    const config = vscode.workspace.getConfiguration('gfmpreview');
+    const username = config.get('githubUsername', '');
+    const password = config.get('githubPassword', '');
+    if (!username || !password) {
+      return options;
+    }
+
+    options.auth = `${username}:${password}`;
+    return options;
+  }
+
+  private request(body: string): Thenable<string> {
+    const options = this.createOptions(body);
     return new Promise((resolve, reject) => {
-      let req = https.request(options, (res) => {
+      const req = https.request(options, (res) => {
         let response = [];
         res.setEncoding('utf-8');
         res.on('data', (chunk) => response.push(chunk));
