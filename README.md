@@ -1,16 +1,17 @@
 # vscode-gfm-preview
 
 Preview Markdown with GFM.
+![screenshot](https://raw.githubusercontent.com/tomoki1207/gfm-preview/images/screenshot.png)
 
 ## Description
 
-Rendering Markdown preview with GFM using [GitHub API]("https://developer.github.com/v3/markdown/").  
+Rendering Markdown preview with GFM using [GitHub API](https://developer.github.com/v3/markdown/).  
 
 ## Authentication
 You can **60 requests per hour** in Unauthenticated mode.  
 To get more, you have to authenticate via extension configuration.  
 When authenticated mode, You can **5,000 requests** per hour.  
-For more infomation, please see [Documentation]("https://developer.github.com/guides/getting-started/#authentication").
+For more infomation, please see [Documentation](https://developer.github.com/guides/getting-started/#authentication).
 
 ## Extension Settings
 
