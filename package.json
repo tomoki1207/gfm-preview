@@ -1,8 +1,8 @@
 {
   "name": "vscode-gfm-preview",
-  "displayName": "vscode-gfm-preview",
+  "displayName": "GFM Preview",
   "description": "Preview Markdown with GFM using GitHub API",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "tomoki1207",
   "repository": {
     "type": "git",
@@ -17,6 +17,11 @@
   "categories": [
     "Other"
   ],
+  "keywords": [
+    "Markdown",
+    "GFM"
+  ],
+  "icon": "gfm-icon.png",
   "activationEvents": [
     "onCommand:gfmarkdown.showPreview",
     "onCommand:gfmarkdown.showPreviewToSide"
