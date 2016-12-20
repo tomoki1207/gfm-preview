@@ -11,7 +11,22 @@ export class GFMDocumentContentProvider implements vscode.TextDocumentContentPro
 
   public provideTextDocumentContent(uri: Uri): Thenable<string> {
     return vscode.workspace.openTextDocument(Uri.parse(uri.query)).then(document => {
-      return this.request(document.getText());
+      return this.request(document.getText()).then(body => {
+        const head = [
+          '<!DOCTYPE html>',
+          '<html>',
+          '<head>',
+          '<meta http-equiv="Content-type" content="text/html;charset=UTF-8">',
+          `<base href="${document.uri.toString(true)}">`,
+          '</head>',
+          '<body>'
+        ].join('\n');
+			const tail = [
+				'</body>',
+				'</html>'
+      ].join('\n');
+      return head + body + tail;
+      });
     });
   }
 
@@ -51,7 +66,7 @@ export class GFMDocumentContentProvider implements vscode.TextDocumentContentPro
         let response = [];
         res.setEncoding('utf-8');
         res.on('data', (chunk) => response.push(chunk));
-        res.on('end', () => resolve(response.join()));
+        res.on('end', () => resolve(response.join('')));
       });
       req.on('error', (err) => reject(err));
       req.write(JSON.stringify({
