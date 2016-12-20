@@ -5,12 +5,12 @@ Preview Markdown with GFM.
 
 ## Description
 
-Rendering Markdown preview with GFM using [GitHub API](https://developer.github.com/v3/markdown/).  
+Rendering Markdown preview with GFM using [GitHub API](https://developer.github.com/v3/markdown/).
 
 ## Authentication
-You can **60 requests per hour** in Unauthenticated mode.  
-To get more, you have to authenticate via extension configuration.  
-When authenticated mode, You can **5,000 requests** per hour.  
+You can **60 requests per hour** in Unauthenticated mode.
+To get more, you have to authenticate via extension configuration.
+When authenticated mode, You can **5,000 requests** per hour.
 For more infomation, please see [Documentation](https://developer.github.com/guides/getting-started/#authentication).
 
 ## Extension Settings
@@ -22,6 +22,14 @@ This extension contributes the following settings:
 * `gfmpreview.githubPassword`: Your GitHub password for API authentication.
 
 ## Release Notes
+
+### 0.1.2(2016/12/20)
+
+-  Fixed (#1) does not process relative path.
+
+### 0.1.1(2016/11/28)
+
+Update manifest
 
 ### 0.1.0(2016/11/26)
 
